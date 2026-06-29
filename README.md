@@ -91,3 +91,26 @@ Tested by asking Claude to read `.env` — the hook intercepted and returned the
 
 # skills
 
+### commit_msg skill
+
+Skills live in `.claude/skills/<name>/SKILL.md` and are invoked automatically when their trigger condition is met or when called explicitly. They extend Claude's default behavior within a session.
+
+**Setup:** Created `.claude/skills/commit_msg/SKILL.md` with frontmatter declaring `name: commit_msg` and a body that instructs Claude to:
+- Estimate the code review time based on number of files changed and lines changed
+- Compute a 0–100 difficulty score: `(minutes − 1) × 10`, capped at 100 (< 1 min = 0, > 10 min = 100)
+- Insert the score right after `type:` in the commit message, e.g. `feat[40]: ...`
+
+**Skill file location:**
+```
+.claude/skills/commit_msg/SKILL.md
+```
+
+**How to invoke:** Ask Claude to commit changes and reference the skill:
+```
+commit everything, make sure to use commit msg skill
+```
+
+**Test result:** Committed 7 files (~156 lines changed). Estimated review time: 5 minutes → score = (5−1)×10 = **40**. Resulting commit message:
+```
+feat[40]: add Claude Code lab configuration, documentation, and commit_msg skill
+```
