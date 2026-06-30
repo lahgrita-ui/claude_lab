@@ -21,7 +21,7 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that lets any
 mcp/
 ├── mcp_server.py   — FastMCP server (tools, resources, prompts)
 ├── mcp_client.py   — Async client (list/call tools, prompts, resources)
-├── main.py         — HTTP entry point (default: http://127.0.0.1:8000/mcp)
+├── main.py         — HTTP entry point (default: http://127.0.0.1:8085/mcp)
 ├── pyproject.toml  — uv project config
 └── .venv/          — isolated Python environment
 ```
@@ -197,9 +197,24 @@ From the Inspector you can:
 
 To stop: `pkill -f "fastmcp dev"`
 
-> Screenshot — MCP Inspector (`fastmcp dev inspector mcp_server.py --ui-port 5078`):
->
-> ![MCP Inspector](docs/screenshot_inspector.png)
+**Connect tip:** in the inspector form, set **Transport Type → STDIO**, fill **Command** with the full path to your venv's `fastmcp` binary (e.g. `/path/to/mcp/.venv/bin/fastmcp`) and **Arguments** with `run /path/to/mcp/mcp_server.py --no-banner`, then click Connect.
+
+#### Inspector screenshots
+
+| | |
+|---|---|
+| ![Landing](assets/01_landing.png) | ![Configured](assets/02_configured.png) |
+| *Landing — transport config form* | *STDIO command configured* |
+| ![Connected](assets/03_connected.png) | ![Resources](assets/04_resources_list.png) |
+| *Connected — server info & nav* | *Resources tab — 4 obsidian://docs/* URIs* |
+| ![Resource content](assets/05_resource_content.png) | ![Tools list](assets/06_tools_list.png) |
+| *obsidian://docs/obsidian content* | *Tools tab — all 4 tools* |
+| ![list_vaults](assets/07_tool_list_vaults.png) | ![list_vaults result](assets/08_tool_list_vaults_result.png) |
+| *list_vaults tool selected* | *list_vaults result — vault JSON* |
+| ![Prompts](assets/09_prompts_list.png) | ![vault_summary](assets/10_prompt_vault_summary.png) |
+| *Prompts tab — patch_document & vault_summary* | *vault_summary argument form* |
+| ![vault_summary result](assets/11_prompt_vault_summary_result.png) | |
+| *vault_summary rendered prompt* | |
 
 ### Option 3 — Python client
 
@@ -209,19 +224,11 @@ uv run python mcp_client.py
 
 Runs `_demo()`: lists all tools / prompts / resources, calls `list_vaults`, renders `vault_summary`, and reads the `obsidian://docs/obsidian` resource.
 
-> Screenshot — client demo output (`uv run python mcp_client.py`):
->
-> ![Client demo](docs/screenshot_client.png)
-
 ### Option 4 — HTTP entry point
 
 ```bash
 uv run main.py
 ```
-
-> Screenshot — server startup (`uv run main.py`):
->
-> ![Server startup](docs/screenshot_server.png)
 
 ---
 
