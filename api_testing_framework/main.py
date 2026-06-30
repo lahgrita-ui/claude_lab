@@ -24,19 +24,23 @@ sys.path.insert(0, str(Path(__file__).parent))
 from config import configure
 from dataset import build_dataset
 from experiment import print_summary, run_experiments
+from prompts import register_prompts
 
 
 def main():
     print("── Desert Recipe Prompt Evaluation ──")
 
-    print("\n[1/3] Configuring Opik...")
+    print("\n[1/4] Configuring Opik...")
     configure()
     print("  Opik configured → project: sunny-testing")
 
-    print("\n[2/3] Building dataset...")
+    print("\n[2/4] Registering prompts in Opik library...")
+    register_prompts()
+
+    print("\n[3/4] Building dataset...")
     dataset = build_dataset()
 
-    print("\n[3/3] Running experiments...")
+    print("\n[4/4] Running experiments...")
     results = run_experiments(dataset)
 
     print_summary(results)

@@ -1,4 +1,8 @@
-"""Two prompt variants for the desert-recipe hypothesis experiment."""
+"""Two prompt variants for the desert-recipe hypothesis experiment.
+
+Python format strings (used at runtime via .format(ingredients=...)).
+Jinja2 equivalents are registered in the Opik prompt library by register_prompts().
+"""
 
 ZERO_SHOT = """\
 You are a creative pastry chef.
@@ -10,7 +14,8 @@ Provide the following:
 - Recipe name
 - Servings
 - Ingredients with amounts
-- Numbered step-by-step instructions"""
+- Numbered step-by-step instructions"""  # end ZERO_SHOT
+
 
 FEW_SHOT = """\
 You are a creative pastry chef.
@@ -43,3 +48,37 @@ Provide the following:
 - Servings
 - Ingredients with amounts
 - Numbered step-by-step instructions"""
+
+
+def register_prompts() -> None:
+    """Push both prompt variants to the Opik prompt library (versioned).
+
+    Converts Python {ingredients} placeholders to Jinja2 {{ ingredients }}
+    so Opik can render them natively in its UI.
+    """
+    import opik
+    from opik.api_objects.prompt.types import PromptType
+
+    client = opik.Opik()
+
+    for name, template, description in [
+        (
+            "desert-recipe-zero-shot",
+            ZERO_SHOT,
+            "Zero-shot: instructs the model to produce a dessert recipe from an ingredient list. No examples provided.",
+        ),
+        (
+            "desert-recipe-few-shot",
+            FEW_SHOT,
+            "Few-shot: same task with two in-context recipe examples (rice pudding, banana loaf) before the target ingredients.",
+        ),
+    ]:
+        jinja2_template = template.replace("{ingredients}", "{{ ingredients }}")
+        prompt = client.create_prompt(
+            name=name,
+            prompt=jinja2_template,
+            description=description,
+            type=PromptType.JINJA2,
+            tags=["desert-recipes", "hypothesis-test"],
+        )
+        print(f"  Registered '{name}' (commit: {prompt.commit})")
