@@ -114,3 +114,43 @@ commit everything, make sure to use commit msg skill
 ```
 feat[40]: add Claude Code lab configuration, documentation, and commit_msg skill
 ```
+
+# MCP — Obsidian MCP Server
+
+Located in `mcp/`. A full Model Context Protocol server that lets any MCP client (Claude Desktop, custom clients, the MCP Inspector) read and edit Obsidian vaults.
+
+**Stack:** FastMCP 3.4.2 · obsidiantools · py-obsidianmd · uv
+
+### What was built
+
+| File | Purpose |
+|---|---|
+| `mcp/mcp_server.py` | FastMCP server — tools, resources, prompts |
+| `mcp/mcp_client.py` | Async Python client with list/call helpers |
+| `mcp/main.py` | HTTP entry point with transport flag |
+
+**Tools (4):** `list_vaults` · `edit_vault` (create/rename/delete notes & folders) · `read_document` · `edit_document`
+
+**Resources (4):** `obsidian://docs/obsidian` · `obsidian://docs/obsidiantools` · `obsidian://docs/fastmcp` · `obsidian://docs/py-obsidianmd`
+
+**Prompts (2):** `patch_document` (MD section patching, no full rewrite) · `vault_summary` (≤ 250-char vault digest)
+
+### How to run
+
+```bash
+cd mcp
+
+# Install
+uv venv && uv add fastmcp obsidiantools py-obsidianmd
+
+# HTTP server — MCP endpoint at http://127.0.0.1:8085/mcp
+uv run main.py
+
+# MCP Inspector (browser UI)
+fastmcp dev inspector mcp_server.py
+
+# Python client demo
+uv run python mcp_client.py
+```
+
+See `mcp/README.md` for full setup, testing instructions, and Claude Desktop integration.
