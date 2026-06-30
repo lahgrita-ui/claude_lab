@@ -58,8 +58,9 @@ def register_prompts() -> None:
     """
     import opik
     from opik.api_objects.prompt.types import PromptType
+    from config import PROJECT_NAME
 
-    client = opik.Opik()
+    client = opik.Opik(project_name=PROJECT_NAME)
 
     for name, template, description in [
         (
@@ -85,5 +86,6 @@ def register_prompts() -> None:
                 "model": "claude-haiku-4-5-20251001",
                 "max_tokens": 600,
             },
+            project_name=PROJECT_NAME,
         )
         print(f"  Registered '{name}' v1 (commit: {prompt.commit})")

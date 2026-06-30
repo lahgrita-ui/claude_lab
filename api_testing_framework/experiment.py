@@ -32,7 +32,7 @@ _FALLBACK_TEMPLATES = {
     "few_shot": FEW_SHOT,
 }
 
-_opik_client = opik.Opik()
+_opik_client = opik.Opik(project_name=PROJECT_NAME)
 
 
 def make_task(label: str):
@@ -48,13 +48,14 @@ def make_task(label: str):
     @opik.track(project_name=PROJECT_NAME, name=f"generate_recipe_{label}")
     def task(dataset_item: dict) -> dict:
         # Fetch versioned prompt from Opik library — must be inside @opik.track
-        prompt_obj = _opik_client.get_prompt(name=prompt_name)
+        prompt_obj = _opik_client.get_prompt(name=prompt_name, project_name=PROJECT_NAME)
         if prompt_obj is None:
             # First-run bootstrap: push to library and use immediately
             prompt_obj = _opik_client.create_prompt(
                 name=prompt_name,
                 prompt=fallback_template.replace("{ingredients}", "{{ ingredients }}"),
                 type=PromptType.JINJA2,
+                project_name=PROJECT_NAME,
                 metadata={
                     "version": "v1",
                     "model": "claude-haiku-4-5-20251001",
