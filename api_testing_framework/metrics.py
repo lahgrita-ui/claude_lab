@@ -48,21 +48,28 @@ class RecipeStructureGrader(BaseMetric):
 
 
 def make_ingredient_relevance_grader() -> GEval:
-    """Build the GEval grader lazily — called after dotenv has loaded the API key."""
+    """Build the GEval grader lazily — called after dotenv has loaded the API key.
+
+    GEval scores on a 0-10 integer scale (Opik normalises to 0-1 by ÷10).
+    """
     return GEval(
         name="ingredient_relevance",
-        task_introduction="You are evaluating whether a generated dessert recipe uses the supplied ingredients.",
+        task_introduction=(
+            "You are evaluating whether a generated dessert recipe uses the "
+            "ingredients mentioned in the recipe text. Score on a 0-10 integer scale."
+        ),
         evaluation_criteria="""\
-Score whether the recipe meaningfully uses the provided ingredients.
+Read the recipe text and judge how thoroughly it incorporates a variety of
+key dessert ingredients (things like sugars, dairy, eggs, flour, fruits,
+spices, or other flavouring agents).
 
-1.0 — All or nearly all key ingredients appear in the recipe with appropriate amounts.
-0.75 — Most ingredients are used; one minor ingredient missing.
-0.5 — About half the ingredients are used.
-0.25 — Only one or two ingredients appear.
-0.0 — None of the provided ingredients are used, or the recipe contradicts them.
+10 — Recipe uses 4 or more distinct key dessert ingredients with specific amounts.
+7-9 — Recipe uses 3 key ingredients with amounts; one ingredient is generic/vague.
+4-6 — Recipe uses only 2 key ingredients or amounts are missing for most.
+1-3 — Recipe mentions ingredients but gives no quantities or method.
+0 — No recognisable dessert ingredients or recipe is completely absent.
 
-The 'input' field contains the ingredient list.
-The 'output' field contains the generated recipe.
+Score as a single integer 0-10.
 """,
         model="claude-haiku-4-5-20251001",
     )
