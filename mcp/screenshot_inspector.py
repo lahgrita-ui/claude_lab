@@ -4,7 +4,10 @@ import asyncio
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from playwright.async_api import async_playwright
+
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 TOKEN = os.environ.get("MCP_TOKEN", "")
 BASE_URL = f"http://localhost:5078/?MCP_PROXY_PORT=3000&MCP_PROXY_AUTH_TOKEN={TOKEN}"

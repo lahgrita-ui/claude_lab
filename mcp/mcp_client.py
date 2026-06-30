@@ -3,7 +3,10 @@
 import asyncio
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastmcp import Client
+
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 SERVER_SCRIPT = str(Path(__file__).parent / "mcp_server.py")
 

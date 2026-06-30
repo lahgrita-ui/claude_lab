@@ -1,6 +1,10 @@
 import json
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 import obsidiantools.api as otools
 from fastmcp import FastMCP
 

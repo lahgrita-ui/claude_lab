@@ -1,6 +1,11 @@
 """Entry point — runs the Obsidian MCP server over HTTP (default) or stdio."""
 
 import argparse
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 from mcp_server import mcp
 
