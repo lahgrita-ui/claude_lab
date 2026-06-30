@@ -33,7 +33,6 @@ from opik.evaluation.metrics.score_result import ScoreResult
 from config import PROJECT_NAME, configure
 from experiment import make_task
 from metrics import RecipeStructureGrader, make_ingredient_relevance_grader
-from prompts import FEW_SHOT, ZERO_SHOT
 
 # ── Test dataset ──────────────────────────────────────────────────────────────
 
@@ -186,13 +185,13 @@ def run_test_suite(dataset) -> dict:
     ]
 
     results = {}
-    for label, template in [("zero_shot", ZERO_SHOT), ("few_shot", FEW_SHOT)]:
+    for label in ["zero_shot", "few_shot"]:
         exp_name = f"test_suite_{label}"
         print(f"\n  Running: {exp_name}")
         result = evaluate(
             experiment_name=exp_name,
             dataset=dataset,
-            task=make_task(template, label),
+            task=make_task(label),
             scoring_metrics=metrics,
             project_name=PROJECT_NAME,
         )

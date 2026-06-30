@@ -80,5 +80,10 @@ def register_prompts() -> None:
             description=description,
             type=PromptType.JINJA2,
             tags=["desert-recipes", "hypothesis-test"],
+            metadata={
+                "version": "v1",
+                "model": "claude-haiku-4-5-20251001",
+                "max_tokens": 600,
+            },
         )
-        print(f"  Registered '{name}' (commit: {prompt.commit})")
+        print(f"  Registered '{name}' v1 (commit: {prompt.commit})")
